@@ -1,5 +1,8 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
+
+app.use(cors())
 
 app.use(express.json())
 
@@ -93,8 +96,23 @@ let notes = [
   
   app.use(unknownEndpoint)
 
-  const PORT = 3001
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-  })
+  const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
 
+const mongoose = require('mongoose')
+
+// DO NOT SAVE YOUR PASSWORD TO GITHUB!!
+const url =
+  `mongodb+srv://fullstack:<password>@cluster0.o1opl.mongodb.net/noteApp?retryWrites=true&w=majority`
+
+mongoose.connect(url)
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  date: Date,
+  important: Boolean,
+})
+
+const Note = mongoose.model('Note', noteSchema)
